@@ -1,0 +1,365 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+
+        <div id="conteudoDinamico" class="container">
+            <form method="post" action="{% url 'editar_reservas' reservas_pk=reserva.id %}">
+                {% csrf_token %}
+                <!-- Start Input Name -->
+                <h1>INFORMAÇÕES DA RESERVA</h1>
+                <div class="form-row">
+                    <!-- Start Input Date -->
+                    <div class="form-group col-md-3">     
+                        <label for="{{ form.entrada.id_for_label }}">Entrada:</label>                                        
+                            {{ form.entrada }}                                       
+                    </div>
+                    
+                    <div class="form-group col-md-3">     
+                        <label for="{{ form.saida.id_for_label }}">Saída:</label>                                        
+                            {{ form.saida }}                                       
+                    </div>
+                    
+                    <div class="form-group col-md-3">
+                        <label for="{{ form.qtde_hosp.id_for_label }}">Qtde de Hóspedes:</label>
+                        {{ form.qtde_hosp }}                                             
+                    </div> 
+                    
+                    
+                    <div class="form-group col-md-2" style="display:none;">
+                        <input type="hidden" id="qtde_quartos" name="qtde_quartos" value="1">                                           
+                    </div>
+
+                    <div class="form-group col-md-3">     
+                        <label for="motivo_viagem">Motivo da Viagem:</label>
+                        <select name="motivo_viagem" id="motivo_viagem" class="form-control">                        
+                            <option value="Saúde" {% if reserva.motivo_viagem == "Saúde" %}selected{% endif %}>Saúde</option>
+                            <option value="Trabalho" {% if reserva.motivo_viagem == "Trabalho" %}selected{% endif %}>Trabalho</option>
+                            <option value="Turismo" {% if reserva.motivo_viagem == "Turismo" %}selected{% endif %}>Turismo</option>
+                        </select>                                       
+                    </div>
+                </div>
+                <hr />
+                <h1>DADOS DO HÓSPEDE PRINCIPAL</h1>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.nome.id_for_label }}">Nome Completo:</label>                                        
+                            {{ form.nome }}                                             
+                    </div>
+                    
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.email.id_for_label }}">E-mail:</label>                                        
+                            {{ form.email }}                                             
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.cpf.id_for_label }}">CPF:</label>                                        
+                            {{ form.cpf }}                                             
+                    </div>
+                    
+                    <div class="form-group col-md-6">
+                        <label for="{{ form.telefone.id_for_label }}">Telefone:</label>                                        
+                            {{ form.telefone }}                                             
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">     
+                        <label for="{{ form.status.id_for_label }}">Status:</label>                                        
+                            {{ form.status }} 
+                    </div>
+                    <div class="form-group col-md-3">     
+                        <label for="{{ form.graduacao.id_for_label }}">Graduação:</label>                                        
+                            {{ form.graduacao }} 
+                    </div>
+                    <div class="form-group col-md-3">     
+                        <label for="{{ form.tipo.id_for_label }}">Tipo:</label>                                        
+                            {{ form.tipo }} 
+                    </div>
+                    <div class="form-group col-md-2">     
+                        <label for="{{ form.sexo.id_for_label }}">Sexo:</label>                                        
+                            {{ form.sexo }}                                       
+                    </div>
+                </div>    
+                <div id="linha" class="hidden"><hr /></div>
+                <div id="singular" class="hidden">     
+                    <h1>INFORMAÇÃO DO ACOMPANHANTE</h1>                                      
+                </div>
+                <div id="plural" class="hidden">     
+                    <h1>INFORMAÇÕES DOS ACOMPANHANTES</h1>                                      
+                </div>  
+                <div id="acompanhante1" class="hidden">     
+                    
+                    <div class="form-row">
+                        
+                        <div class="form-group col-md-6">     
+                            <label for="{{ form.nome_acomp1.id_for_label }}">Nome Completo:</label>                                        
+                                {{ form.nome_acomp1 }}                                       
+                        </div>
+                        <div class="form-group col-md-3">     
+                            <label for="{{ form.vinculo_acomp1.id_for_label }}">Vínculo Familiar:</label>                                        
+                                {{ form.vinculo_acomp1 }}                                       
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="{{ form.idade_acomp1.id_for_label }}">Idade:</label>                                        
+                                {{ form.idade_acomp1 }}                                             
+                        </div>                                        
+                        <div class="form-group col-md-2">     
+                            <label for="{{ form.sexo_acomp1.id_for_label }}">Sexo:</label>                                        
+                                {{ form.sexo_acomp1 }}                                       
+                        </div>
+                    </div>
+                    
+                </div>
+                <div id="acompanhante2" class="hidden">     
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-6">     
+                            <label for="{{ form.nome_acomp2.id_for_label }}">Nome Completo:</label>                                        
+                                {{ form.nome_acomp2 }}                                       
+                        </div>
+                        <div class="form-group col-md-3">     
+                            <label for="{{ form.vinculo_acomp2.id_for_label }}">Vínculo Familiar:</label>                                        
+                                {{ form.vinculo_acomp2 }}                                       
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="{{ form.idade_acomp2.id_for_label }}">Idade:</label>                                        
+                                {{ form.idade_acomp2 }}                                             
+                        </div>                                        
+                        <div class="form-group col-md-2">     
+                            <label for="{{ form.sexo_acomp2.id_for_label }}">Sexo:</label>                                        
+                                {{ form.sexo_acomp2 }}                                       
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div id="acompanhante3" class="hidden">     
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-6">     
+                            <label for="{{ form.nome_acomp3.id_for_label }}">Nome Completo:</label>                                        
+                                {{ form.nome_acomp3 }}                                       
+                        </div>
+                        <div class="form-group col-md-3">     
+                            <label for="{{ form.vinculo_acomp3.id_for_label }}">Vínculo Familiar:</label>                                        
+                                {{ form.vinculo_acomp3 }}                                       
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="{{ form.idade_acomp3.id_for_label }}">Idade:</label>                                        
+                                {{ form.idade_acomp3 }}                                             
+                        </div>                                        
+                        <div class="form-group col-md-2">     
+                            <label for="{{ form.sexo_acomp3.id_for_label }}">Sexo:</label>                                        
+                                {{ form.sexo_acomp3 }}                                       
+                        </div>
+                    </div>
+                    
+                </div> 
+                
+                <div id="acompanhante4" class="hidden">     
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-6">     
+                            <label for="{{ form.nome_acomp4.id_for_label }}">Nome Completo:</label>                                        
+                                {{ form.nome_acomp4 }}                                       
+                        </div>
+                        <div class="form-group col-md-3">     
+                            <label for="{{ form.vinculo_acomp4.id_for_label }}">Vínculo Familiar:</label>                                        
+                                {{ form.vinculo_acomp4 }}                                       
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="{{ form.idade_acomp4.id_for_label }}">Idade:</label>                                        
+                                {{ form.idade_acomp4 }}                                             
+                        </div>                                        
+                        <div class="form-group col-md-2">     
+                            <label for="{{ form.sexo_acomp4.id_for_label }}">Sexo:</label>                                        
+                                {{ form.sexo_acomp4 }}                                       
+                        </div>
+                    </div>
+                    
+                </div>  
+                
+                <div id="acompanhante5" class="hidden">     
+                    
+                    <div class="form-row">
+                        <div class="form-group col-md-6">     
+                            <label for="{{ form.nome_acomp5.id_for_label }}">Nome Completo:</label>                                        
+                                {{ form.nome_acomp5 }}                                       
+                        </div>
+                        <div class="form-group col-md-3">     
+                            <label for="{{ form.vinculo_acomp5.id_for_label }}">Vínculo Familiar:</label>                                        
+                                {{ form.vinculo_acomp5 }}                                       
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="{{ form.idade_acomp5.id_for_label }}">Idade:</label>                                        
+                                {{ form.idade_acomp5 }}                                             
+                        </div>                                        
+                        <div class="form-group col-md-2">     
+                            <label for="{{ form.sexo_acomp5.id_for_label }}">Sexo:</label>                                        
+                                {{ form.sexo_acomp5 }}                                       
+                        </div>
+                    </div>
+                    
+                </div>       
+                <hr />    
+                <h1>OUTRAS INFORMAÇÕES</h1>
+                <div class="form-row">
+                    <div class="form-group col-md-8">     
+                        <label for="{{ form.cidade.id_for_label }}">Cidade:</label>                                        
+                            {{ form.cidade }}                                       
+                    </div>
+                    <div class="form-group col-md-1">     
+                        <label for="{{ form.uf.id_for_label }}">UF:</label>                                        
+                            {{ form.uf }}                                       
+                    </div>
+                    <div class="form-group col-md-3">     
+                        <label for="{{ form.especial.id_for_label }}">Necessidades Especiais?</label>                                        
+                            {{ form.especial }}                                       
+                    </div>
+                    <!-- Campo oculto para status_reserva -->
+                    <input type="hidden" name="status_reserva" id="id_status_reserva" value="Pendente"> 
+                </div>    
+                <hr />
+                    
+                <h1>DEFINIDO PELO GESTOR:</h1>
+                <div class="form-row">
+                    <div class="form-group col-md-4">     
+                        <label for="id_status_reserva">Status da Reserva:</label>
+                            <select name="status_reserva" id="id_status_reserva" class="form-control">
+                                <option value="Pendente" {% if form.instance.status_reserva == "Pendente" %}selected{% endif %}>Pendente</option>
+                                <option value="Aprovada" {% if form.instance.status_reserva == "Aprovada" %}selected{% endif %}>Aprovada</option>
+                                <option value="Recusada" {% if form.instance.status_reserva == "Recusada" %}selected{% endif %}>Recusada</option>
+                                <!-- Adicione mais opções conforme necessário -->
+                            </select>                                       
+                    </div>
+                    <div class="form-group col-md-4">     
+                        <label for="{{ form.mhex.id_for_label }}">MHEx</label>                                        
+                            <select name="mhex" id="id_mhex" class="form-control">
+                                <option value="HTM_01" {% if form.instance.mhex == "HTM_01" %}selected{% endif %}>HTM_01</option>
+                                <option value="HTM_02" {% if form.instance.mhex == "HTM_02" %}selected{% endif %}>HTM_02</option>
+                                <!-- Adicione mais opções conforme necessário -->
+                            </select>                                         
+                    </div>
+                    <div class="form-group col-md-4">     
+                        <label for="{{ form.uh.id_for_label }}">UH</label>                                        
+                        <select name="uh" id="id_uh" class="form-control">
+                            <option value=1 {% if form.instance.uh == "01" %}selected{% endif %}>01</option>
+                            <option value=2 {% if form.instance.uh == "02" %}selected{% endif %}>02</option>
+                            <option value=3 {% if form.instance.uh == "03" %}selected{% endif %}>03</option>
+                            <option value=4 {% if form.instance.uh == "04" %}selected{% endif %}>04</option>
+                            <option value=5 {% if form.instance.uh == "05" %}selected{% endif %}>05</option>
+                            <option value=6 {% if form.instance.uh == "06" %}selected{% endif %}>06</option>
+                            <option value=7 {% if form.instance.uh == "07" %}selected{% endif %}>07</option>
+                            <option value=8 {% if form.instance.uh == "08" %}selected{% endif %}>08</option>
+                            <option value=9 {% if form.instance.uh == "09" %}selected{% endif %}>09</option>
+                            <!-- Adicione mais opções conforme necessário -->
+                        </select>                                       
+                    </div>
+                    <!-- Campo oculto para status_reserva -->
+                    {% comment %} <input type="hidden" name="status_reserva" id="id_status_reserva" value="Pendente">  {% endcomment %}
+                </div>    
+                <hr />
+                <div class="form-row">
+                    <div class="form-group col-md-9"></div>
+                    <div class="form-group col-md-3">
+                        <button class="btn-sm col-lg-5" type="submit">Salvar</button>
+                        <button class="btn-sm col-lg-5" onclick="window.location.href='{% url 'consultar_reservas' %}'">Cancelar</button>
+                    </div>
+                </div>    
+                <!-- End Submit Button -->
+            </form>
+        </div>  
+        
+    </div>
+</div>        
+{% endblock %}
+
+
+{% block jscript %}
+
+    <script>
+        function toggleAcompanhanteDivs() {
+            var qtdeHospInput = document.getElementById('id_qtde_hosp');
+            var qtdeHosp = parseInt(qtdeHospInput.value, 10) - 1;
+            console.log('Quantidade de Acompanhantes:', qtdeHosp);
+            console.log("JavaScript executado");
+        
+            // Loop para mostrar/esconder divs de acompanhantes baseado em qtde_hosp
+            for (var i = 1; i <= 5; i++) {
+                var div = document.getElementById('acompanhante' + i);
+                if (div) {
+                    div.className = i <= qtdeHosp ? 'visible' : 'hidden';
+                }
+            }
+        
+            // Você não precisa redefinir qtdeHosp após o primeiro uso, a menos que o valor de qtdeHospInput tenha mudado.
+            //var qtdeHosp = parseInt(qtdeHospInput.value, 10);
+        
+            // Ajustando visibilidade para singular ou plural
+            if ((qtdeHosp + 1 === 3) || (qtdeHosp + 1 === 4) || (qtdeHosp + 1 === 5) || (qtdeHosp + 1 === 6)) {
+                // Ajuste para qtdeHosp + 1 porque você diminuiu 1 antes
+                console.log("Condição verdadeira. Ocultando divs.");
+                document.getElementById('singular').className = 'hidden';
+                document.getElementById('plural').className = 'visible';
+                document.getElementById('linha').className = 'visible';
+            } else if (qtdeHosp + 1 === 2) {
+                document.getElementById('singular').className = 'visible';
+                document.getElementById('plural').className = 'hidden';
+                document.getElementById('linha').className = 'visible';
+            } else {
+                document.getElementById('singular').className = 'hidden';
+                document.getElementById('plural').className = 'hidden';
+                document.getElementById('linha').className = 'hidden';
+            }
+        }
+        
+        // Use DOMContentLoaded para adicionar event listeners ou para executar código inicial
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Aqui você pode adicionar listeners, por exemplo:
+            var qtdeHospInput = document.getElementById('id_qtde_hosp');
+            if (qtdeHospInput) {
+                qtdeHospInput.addEventListener('change', toggleAcompanhanteDivs);
+                // Também pode querer chamar a função diretamente para definir o estado inicial:
+                toggleAcompanhanteDivs();
+            } else {
+                console.error('Elemento qtde_hosp não encontrado');
+            }
+        });
+    </script>
+    {% comment %} <script> 
+        $(document).ready(function() {
+            $(document).on('submit', 'form[data-ajax="true"]', function(e) {
+                e.preventDefault(); // Evita o comportamento padrão de submissão do formulário
+        
+                var form = $(this);
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    success: function(response) {
+                        if(response.success) {
+                            // Usando alert para simplicidade
+                            alert("Pré-reserva efetivada, aguarde o retorno.");
+        
+                            // Limpa o formulário após fechar o alerta
+                            form.trigger("reset");
+                        } else {
+                            // Tratar os casos de falha, mostrar erros, etc.
+                            alert("Falha ao efetivar a pré-reserva. Por favor, tente novamente.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Tratar erros de comunicação aqui
+                        alert("Erro de comunicação com o servidor. Por favor, tente novamente.");
+                    }
+                });
+            });
+        });
+        
+    </script> {% endcomment %}
+    
+
+{% endblock %}
